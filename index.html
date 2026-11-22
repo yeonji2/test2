@@ -24,20 +24,20 @@
     :root:not([data-theme="light"]) {
       --bg: #1f1b16; --card: #2a251f; --ink: #f4ead8; --muted: #b5a68f; --line: #3d362d;
       --leaf: #4a9e4f; --leaf-dark: #357a3a; --trunk: #8a5d36;
-      --apple-off: #9cc472; --apple-on: #ff5249; --accent: #ff9b55;
+      --apple-off: #9cc472; --apple-on: #ff5249; --accent: #ff9b55; color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
     --bg: #1f1b16; --card: #2a251f; --ink: #f4ead8; --muted: #b5a68f; --line: #3d362d;
     --leaf: #4a9e4f; --leaf-dark: #357a3a; --trunk: #8a5d36;
-    --apple-off: #9cc472; --apple-on: #ff5249; --accent: #ff9b55;
+    --apple-off: #9cc472; --apple-on: #ff5249; --accent: #ff9b55; color-scheme: dark;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
     font-family: "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   }
-  main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 40px; }
+  main { max-width: 1000px; margin: 0 auto; padding-block: 24px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   h1 { text-align: center; font-size: clamp(28px, 6vw, 42px); margin: 4px 0 6px; font-weight: 400; }
   .sub { text-align: center; color: var(--muted); margin: 0 0 20px; font-size: 18px; }
   .info {
@@ -81,6 +81,11 @@
     border: none; border-radius: 999px; padding: 10px 22px; cursor: pointer;
   }
   button:hover { filter: brightness(1.05); }
+  button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  button.ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); }
+  .ask { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; font-size: 18px; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { .apple, .apple .body { transition: none; } .apple.pop { animation: none; } }
   .hint { text-align: center; color: var(--muted); margin-top: 12px; font-size: 16px; }
   @media print {
     .actions, .hint { display: none; }
@@ -103,7 +108,14 @@
 
   <div class="total">오늘 딴 사과: <b id="total">0</b> / 15 개</div>
 
-  <div class="actions"><button id="reset" type="button">🔄 처음부터 다시</button></div>
+  <div class="actions">
+    <button id="reset" type="button">🔄 처음부터 다시</button>
+    <div id="ask" class="ask" hidden>
+      <span>사과를 모두 초록색으로 되돌릴까요?</span>
+      <button id="yes" type="button">네, 되돌려요</button>
+      <button id="no" type="button" class="ghost">아니요</button>
+    </div>
+  </div>
   <p class="hint">사과를 한 번 더 누르면 다시 초록색으로 돌아가요.</p>
 </main>
 
@@ -194,10 +206,13 @@
     input.addEventListener("input", () => { state[k] = input.value; save(state); });
   });
 
-  document.getElementById("reset").addEventListener("click", () => {
-    if (!confirm("사과를 모두 초록색으로 되돌릴까요?")) return;
+  const resetBtn = document.getElementById("reset"), ask = document.getElementById("ask");
+  resetBtn.addEventListener("click", () => { resetBtn.hidden = true; ask.hidden = false; });
+  document.getElementById("no").addEventListener("click", () => { ask.hidden = true; resetBtn.hidden = false; });
+  document.getElementById("yes").addEventListener("click", () => {
     TREES.forEach((t) => (state.apples[t.id] = [false, false, false, false, false]));
     save(state); render();
+    ask.hidden = true; resetBtn.hidden = false;
   });
 
   render();

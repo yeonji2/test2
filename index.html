@@ -5,205 +5,361 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>사과나무 연습일지</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
-  /* Layout: blueprint-style navy sheet, gold hairlines, three tree plates in a row */
+  /* Layout: sunny orchard — sky hero card, tab switch between today's trees and the month calendar */
   :root {
-    --bg: #0d1832;
-    --bg-deep: #081124;
-    --panel: rgba(20, 36, 72, 0.72);
-    --ink: #f3efe6;
-    --muted: #a7b1c6;
-    --gold: #d8b677;
-    --gold-soft: rgba(216, 182, 119, 0.35);
-    --gold-faint: rgba(216, 182, 119, 0.09);
-    --apple: #e4473d;
-    --font: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --bg: #f3f9ff;
+    --sky: #d6eeff;
+    --grass: #cdeeb2;
+    --card: #ffffff;
+    --ink: #2b3a4c;
+    --muted: #677a90;
+    --line: #d7e5f3;
+    --leaf: #5cbf5f;
+    --leaf-dark: #3f9e47;
+    --trunk: #a0703f;
+    --apple-off: #c6e79c;
+    --apple-on: #ee3a33;
+    --accent: #ff8a3d;
+    --sun: #ffc93c;
+    --stamp: #e2372e;
+    --l1: #ffe9e6; --l2: #ffc9c2; --l3: #ff9488; --l4: #ee3a33;
+    --display: "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #142030; --sky: #1c2f49; --grass: #1f3a2a; --card: #1d2b3d; --ink: #eef4fb; --muted: #a2b3c7; --line: #304259;
+      --leaf: #4aa84f; --leaf-dark: #36863c; --trunk: #8d6036; --apple-off: #9cc472; --apple-on: #ff554c;
+      --accent: #ff9b55; --sun: #ffcf55; --stamp: #ff5a50;
+      --l1: #3a2a33; --l2: #5c2f34; --l3: #a03a38; --l4: #ff554c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #142030; --sky: #1c2f49; --grass: #1f3a2a; --card: #1d2b3d; --ink: #eef4fb; --muted: #a2b3c7; --line: #304259;
+    --leaf: #4aa84f; --leaf-dark: #36863c; --trunk: #8d6036; --apple-off: #9cc472; --apple-on: #ff554c;
+    --accent: #ff9b55; --sun: #ffcf55; --stamp: #ff5a50;
+    --l1: #3a2a33; --l2: #5c2f34; --l3: #a03a38; --l4: #ff554c;
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
-  html { background: var(--bg-deep); }
-  body {
-    margin: 0; color: var(--ink); font-family: var(--font);
-    background:
-      radial-gradient(ellipse at 50% 0%, #182a52 0%, transparent 60%),
-      linear-gradient(var(--gold-faint) 1px, transparent 1px) 0 0 / 80px 80px,
-      linear-gradient(90deg, var(--gold-faint) 1px, transparent 1px) 0 0 / 80px 80px,
-      var(--bg);
-    min-height: 100vh;
-  }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; }
   main {
-    max-width: 1040px; margin: 0 auto; padding-block: 28px 48px;
+    max-width: 1000px; margin: 0 auto; padding-block: 20px 48px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; flex-direction: column; gap: 18px;
   }
+  h1, h2, h3, .display { font-family: var(--display); font-weight: 400; }
 
   /* Hero */
-  .hero { position: relative; text-align: center; padding: 36px 0 28px; overflow: hidden; }
-  .hero .rings { position: absolute; left: 50%; top: 50%; width: 560px; max-width: 140%; transform: translate(-50%, -50%); pointer-events: none; }
-  .hero > *:not(.rings) { position: relative; }
-  .hero h1 {
-    margin: 0; font-weight: 700; font-size: clamp(24px, 4.6vw, 42px); line-height: 1.3;
-    letter-spacing: -0.01em; text-wrap: balance;
+  .hero {
+    position: relative; overflow: hidden; border-radius: 28px; text-align: center;
+    background: linear-gradient(180deg, var(--sky) 0%, var(--sky) 70%, var(--grass) 70%);
+    padding: 26px 16px 34px;
   }
-  .hero h1 .g { color: var(--gold); }
-  .rule { display: flex; align-items: center; gap: 12px; margin: 18px auto 14px; max-width: 760px; }
-  .rule::before, .rule::after { content: ""; flex: 1; height: 1px; background: var(--gold-soft); }
-  .rule span { width: 9px; height: 9px; border: 1px solid var(--gold); transform: rotate(45deg); }
-  .hero h2 { margin: 0; font-weight: 500; font-size: clamp(18px, 3vw, 26px); }
-  .hero .org { margin: 10px 0 0; font-size: clamp(14px, 2.2vw, 17px); color: var(--muted); letter-spacing: 0.04em; }
-  .label {
-    display: inline-block; margin-top: 22px; padding: 6px 16px; border: 1px solid var(--gold-soft);
-    color: var(--gold); font-size: 15px; letter-spacing: 0.12em;
-  }
+  .hero .sun { position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 0 14px color-mix(in srgb, var(--sun) 30%, transparent); }
+  .hero .cloud { position: absolute; background: var(--card); border-radius: 40px; opacity: .85; }
+  .hero .c1 { width: 90px; height: 28px; top: 30px; left: 6%; }
+  .hero .c2 { width: 60px; height: 20px; top: 70px; left: 18%; }
+  .hero > *:not(.sun):not(.cloud) { position: relative; }
+  .camp { margin: 0; color: var(--muted); font-size: 15px; }
+  .camp b { color: var(--ink); font-weight: 400; font-family: var(--display); font-size: 17px; }
+  .hero h1 { margin: 10px 0 4px; font-size: clamp(32px, 7vw, 50px); line-height: 1.15; text-wrap: balance; }
+  .hero .tag { margin: 0; font-family: var(--display); font-size: clamp(17px, 3vw, 21px); color: var(--accent); }
+  .hero .org { margin: 8px 0 0; font-size: 14px; color: var(--muted); }
 
-  /* Info row */
-  .info {
-    display: flex; flex-wrap: wrap; gap: 14px 22px; justify-content: center;
-    border-top: 1px solid var(--gold-soft); border-bottom: 1px solid var(--gold-soft);
-    padding: 16px 0; margin: 8px 0 24px;
+  /* Tabs */
+  .tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .tabs a {
+    font-family: var(--display); font-size: 19px; text-decoration: none; color: var(--ink);
+    background: var(--card); border: 2px solid var(--line); border-radius: 999px; padding: 10px 22px;
   }
-  .info label { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--muted); }
-  .info input {
-    font: inherit; font-size: 16px; color: var(--ink); background: transparent;
-    border: none; border-bottom: 1px solid var(--gold-soft); padding: 6px 4px; width: 160px;
+  .tabs a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tabs a:focus-visible, button:focus-visible, .day:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  .panel { background: var(--card); border: 2px solid var(--line); border-radius: 22px; padding: 16px; }
+  .info { display: flex; flex-wrap: wrap; gap: 12px 18px; justify-content: center; }
+  .info label { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-size: 17px; }
+  input[type="text"], input[type="date"], input[type="number"], textarea {
+    font: inherit; color: var(--ink); background: var(--bg);
+    border: 2px solid var(--line); border-radius: 12px; padding: 7px 10px;
   }
-  .info input:focus { outline: none; border-bottom-color: var(--gold); }
-  .info input::placeholder { color: rgba(167, 177, 198, .6); }
-  ::-webkit-calendar-picker-indicator { filter: invert(.8) sepia(.6); }
+  .info input { width: 160px; }
+  input:focus, textarea:focus { outline: none; border-color: var(--accent); }
 
   /* Trees */
-  .trees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  @media (max-width: 760px) { .trees { grid-template-columns: 1fr; } }
-  .tree {
-    position: relative; background: var(--panel); border: 1px solid var(--gold-soft);
-    padding: 18px 12px 18px; text-align: center; transition: border-color .3s, box-shadow .3s;
-  }
-  .tree::before, .tree::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid var(--gold); }
-  .tree::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
-  .tree::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
-  .tree.done { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 0 28px rgba(216, 182, 119, .25); }
-  .tree h3 { margin: 0; font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 0.04em; }
-  .tree svg { width: 100%; max-width: 280px; height: auto; display: block; margin: 4px auto 0; }
+  .trees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .trees { grid-template-columns: 1fr; } }
+  .tree { background: var(--card); border: 2px solid var(--line); border-radius: 22px; padding: 14px 10px 16px; text-align: center; transition: border-color .3s, box-shadow .3s; }
+  .tree.done { border-color: var(--apple-on); box-shadow: 0 0 0 4px color-mix(in srgb, var(--apple-on) 20%, transparent); }
+  .tree h3 { margin: 0; font-size: 24px; }
+  .tree svg { width: 100%; max-width: 270px; height: auto; display: block; margin: 0 auto; }
   .apple { cursor: pointer; transform-box: fill-box; transform-origin: center; transition: transform .15s; }
-  .apple:hover { transform: scale(1.1); }
+  .apple:hover { transform: scale(1.08); }
   .apple:focus { outline: none; }
-  .apple:focus-visible .body { stroke: var(--ink); stroke-width: 3; }
-  .apple .body { fill: var(--bg); stroke: var(--gold); stroke-width: 2; transition: fill .25s, stroke .25s; }
-  .apple .shine { fill: rgba(255, 255, 255, 0); transition: fill .25s; }
-  .apple.on .body { fill: var(--apple); stroke: #f3a59c; }
-  .apple.on .shine { fill: rgba(255, 255, 255, .5); }
+  .apple:focus-visible .body { stroke: var(--accent); stroke-width: 4; }
+  .apple .body { fill: var(--apple-off); stroke: rgba(0,0,0,.15); stroke-width: 2; transition: fill .25s; }
+  .apple.on .body { fill: var(--apple-on); }
   .apple.pop { animation: pop .35s ease; }
-  @keyframes pop { 50% { transform: scale(1.28); } }
-  .count { font-size: 20px; margin-top: 6px; font-variant-numeric: tabular-nums; }
-  .count b { color: var(--apple); font-weight: 700; }
-  .cheer { min-height: 24px; color: var(--gold); font-size: 15px; margin-top: 2px; }
+  @keyframes pop { 50% { transform: scale(1.25); } }
+  .count { font-family: var(--display); font-size: 22px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .count b, .big b { color: var(--apple-on); font-weight: 400; }
+  .cheer { min-height: 24px; color: var(--accent); font-family: var(--display); font-size: 18px; }
+  .total { text-align: center; font-family: var(--display); font-size: 23px; }
 
-  .total { margin-top: 24px; text-align: center; font-size: 20px; padding: 16px; border: 1px solid var(--gold-soft); background: var(--panel); }
-  .total b { color: var(--apple); font-weight: 700; font-variant-numeric: tabular-nums; }
-
-  .actions { display: flex; justify-content: center; margin-top: 18px; }
   button {
-    font: inherit; font-size: 15px; color: var(--gold); background: transparent;
-    border: 1px solid var(--gold); padding: 10px 22px; cursor: pointer; letter-spacing: 0.05em;
+    font-family: var(--display); font-size: 17px; color: #fff; background: var(--accent);
+    border: none; border-radius: 999px; padding: 10px 22px; cursor: pointer;
   }
-  button:hover { background: var(--gold); color: var(--bg-deep); }
-  button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  button.ghost { color: var(--muted); border-color: var(--gold-soft); }
-  button.ghost:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
-  .ask { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; font-size: 16px; }
+  button:hover { filter: brightness(1.05); }
+  button.ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); }
+  .actions { display: flex; justify-content: center; }
+  .ask { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; font-family: var(--display); font-size: 17px; }
+  .hint { text-align: center; color: var(--muted); margin: 0; font-size: 14px; }
   [hidden] { display: none !important; }
-  .hint { text-align: center; color: var(--muted); margin-top: 12px; font-size: 14px; }
-  @media (prefers-reduced-motion: reduce) { .apple, .apple .body { transition: none; } .apple.pop { animation: none; } }
+
+  /* Month */
+  .monthbar { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .monthbar h2 { margin: 0; font-size: 28px; min-width: 9ch; text-align: center; }
+  .monthbar button { width: 44px; height: 44px; padding: 0; font-size: 20px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 640px) { .stats { grid-template-columns: 1fr; } }
+  .stat { text-align: center; }
+  .stat .k { font-family: var(--display); color: var(--muted); font-size: 16px; }
+  .big { font-family: var(--display); font-size: 34px; font-variant-numeric: tabular-nums; }
+  .big small { font-size: 17px; color: var(--muted); }
+  .stage { font-family: var(--display); font-size: 17px; color: var(--leaf-dark); }
+  .bar { height: 14px; border-radius: 999px; background: var(--bg); border: 2px solid var(--line); overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--apple-on); border-radius: 999px; transition: width .5s; }
+  .goal { margin-top: 8px; font-size: 14px; color: var(--muted); }
+  .goal input { width: 64px; padding: 3px 6px; text-align: center; }
+
+  .hands { display: grid; gap: 10px; }
+  .hand { display: grid; grid-template-columns: 7ch 1fr 6ch; align-items: center; gap: 10px; font-family: var(--display); font-size: 17px; }
+  .hand span:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+  .hand .bar i { background: var(--leaf); }
+
+  .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; max-width: 640px; margin: 0 auto; }
+  @media (max-width: 480px) { .cal { gap: 4px; } .day { font-size: 13px; border-radius: 9px; padding: 3px; } .day .n { font-size: 11px; } .hero .cloud { display: none; } }
+  .wd { text-align: center; font-family: var(--display); color: var(--muted); font-size: 15px; padding-bottom: 2px; }
+  .wd:first-child { color: var(--stamp); }
+  .day {
+    aspect-ratio: 1 / 1; max-width: 100%; border-radius: 12px; border: 2px solid var(--line);
+    background: var(--card); color: var(--ink); padding: 4px; cursor: pointer;
+    display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+    font-family: var(--display); font-size: 15px; font-variant-numeric: tabular-nums;
+  }
+  .day:hover { border-color: var(--accent); filter: none; }
+  .day .n { align-self: flex-end; font-size: 13px; }
+  .day.l1 { background: var(--l1); } .day.l2 { background: var(--l2); }
+  .day.l3 { background: var(--l3); color: #fff; } .day.l4 { background: var(--l4); color: #fff; }
+  .day.today { border-color: var(--accent); border-width: 3px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line); vertical-align: -2px; margin-right: 3px; }
+
+  /* Teacher note */
+  .note h3 { margin: 0 0 10px; font-size: 22px; }
+  .stamps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .stamps label { font-family: var(--display); border: 2px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+  .stamps input { position: absolute; opacity: 0; }
+  .stamps label:has(input:checked) { border-color: var(--stamp); color: var(--stamp); }
+  .stamps label:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .note textarea { width: 100%; min-height: 96px; resize: vertical; font-size: 17px; line-height: 1.6; }
+  .note .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .note .row input { width: 180px; }
+  .saved { position: relative; padding: 6px 110px 6px 4px; min-height: 100px; }
+  .saved p { margin: 0 0 8px; font-size: 19px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .saved .by { color: var(--muted); font-size: 15px; }
+  .seal {
+    position: absolute; top: 0; right: 4px; width: 96px; height: 96px; border-radius: 50%;
+    border: 4px double var(--stamp); color: var(--stamp); display: grid; place-items: center; text-align: center;
+    font-family: var(--display); font-size: 17px; line-height: 1.2; transform: rotate(-12deg); padding: 8px; white-space: pre-line;
+  }
+  .empty { color: var(--muted); margin: 0 0 10px; }
+  @media (max-width: 480px) { .saved { padding-right: 4px; padding-top: 104px; } .seal { left: 4px; right: auto; } }
+  @media (prefers-reduced-motion: reduce) { .apple, .apple .body, .bar i { transition: none; } .apple.pop { animation: none; } }
 </style>
 </head>
 <body>
 <main>
   <header class="hero">
-    <svg class="rings" viewBox="0 0 560 560" aria-hidden="true">
-      <g fill="none" stroke="rgba(216,182,119,.18)" stroke-width="1">
-        <circle cx="280" cy="280" r="270"></circle>
-        <circle cx="280" cy="280" r="210"></circle>
-        <circle cx="280" cy="280" r="150"></circle>
-        <line x1="0" y1="280" x2="560" y2="280"></line>
-        <line x1="280" y1="0" x2="280" y2="560"></line>
-      </g>
-    </svg>
-    <h1><span class="g">수원대학교 음악 프로그램:</span> 완벽을 향한 여정</h1>
-    <div class="rule" aria-hidden="true"><span></span></div>
-    <h2>제27회 여름음악캠프 &amp; 음악영재아카데미</h2>
+    <span class="sun" aria-hidden="true"></span>
+    <span class="cloud c1" aria-hidden="true"></span>
+    <span class="cloud c2" aria-hidden="true"></span>
+    <p class="camp"><b>수원대학교 음악 프로그램</b> · 제27회 여름음악캠프 &amp; 음악영재아카데미</p>
+    <h1>🍎 사과나무 연습일지</h1>
+    <p class="tag">완벽을 향한 여정, 사과 하나부터!</p>
     <p class="org">수원대학교 음악테크놀로지대학</p>
-    <span class="label">사과나무 연습일지</span>
   </header>
 
-  <div class="info">
+  <nav class="tabs" aria-label="페이지">
+    <a href="#today" id="tab-today">🌳 오늘 연습</a>
+    <a href="#month" id="tab-month">📅 이번 달 달성도</a>
+  </nav>
+
+  <section class="panel info">
     <label for="name">이름 <input id="name" type="text" placeholder="이름을 써요"></label>
-    <label for="date">날짜 <input id="date" type="date"></label>
-    <label for="song">곡 이름 <input id="song" type="text" placeholder="연습한 곡"></label>
-  </div>
+    <label for="date" class="only-today">날짜 <input id="date" type="date"></label>
+    <label for="song" class="only-today">곡 이름 <input id="song" type="text" placeholder="연습한 곡"></label>
+  </section>
 
-  <section class="trees" id="trees"></section>
-
-  <div class="total">오늘 딴 사과 <b id="total">0</b> / 15</div>
-
-  <div class="actions">
-    <button id="reset" type="button">처음부터 다시</button>
-    <div id="ask" class="ask" hidden>
-      <span>사과를 모두 되돌릴까요?</span>
-      <button id="yes" type="button">네, 되돌려요</button>
-      <button id="no" type="button" class="ghost">아니요</button>
+  <!-- TODAY -->
+  <section id="view-today" style="display:flex;flex-direction:column;gap:18px">
+    <div class="trees" id="trees"></div>
+    <div class="panel total">오늘 딴 사과 <b id="total" style="color:var(--apple-on);font-weight:400">0</b> / 15 개</div>
+    <div class="actions">
+      <button id="reset" type="button">🔄 이 날 처음부터 다시</button>
+      <div id="ask" class="ask" hidden>
+        <span>이 날 사과를 모두 초록색으로 되돌릴까요?</span>
+        <button id="yes" type="button">네, 되돌려요</button>
+        <button id="no" type="button" class="ghost">아니요</button>
+      </div>
     </div>
-  </div>
-  <p class="hint">한 번 연습할 때마다 사과를 눌러 빨갛게 익혀 주세요. 다시 누르면 되돌아가요.</p>
+    <p class="hint">한 번 연습할 때마다 사과를 눌러 빨갛게 익혀요. 다시 누르면 초록색으로 돌아가요.</p>
+  </section>
+
+  <!-- MONTH -->
+  <section id="view-month" hidden style="flex-direction:column;gap:18px">
+    <div class="monthbar">
+      <button id="prev" type="button" aria-label="지난 달">◀</button>
+      <h2 id="mtitle">2026년 11월</h2>
+      <button id="next" type="button" aria-label="다음 달">▶</button>
+    </div>
+
+    <div class="stats">
+      <div class="panel stat">
+        <div class="k">연습한 날</div>
+        <div class="big"><b id="sDays">0</b><small> 일</small></div>
+        <div class="goal">목표 <input id="goal" type="number" min="1" max="31"> 일</div>
+      </div>
+      <div class="panel stat">
+        <div class="k">딴 사과</div>
+        <div class="big"><b id="sApples">0</b><small> 개</small></div>
+        <div class="goal" id="sApplesMax">목표 300개</div>
+      </div>
+      <div class="panel stat">
+        <div class="k">달성도</div>
+        <div class="big"><b id="sPct">0</b><small> %</small></div>
+        <div class="bar" role="progressbar" aria-label="달성도" id="pbar"><i id="pfill" style="width:0"></i></div>
+        <div class="stage" id="stage" style="margin-top:6px">🌱 씨앗을 심었어요</div>
+      </div>
+    </div>
+
+    <div class="panel hands" id="hands"></div>
+
+    <div class="panel">
+      <div class="cal" id="cal"></div>
+      <div class="legend">
+        <span><i style="background:var(--card)"></i>0개</span>
+        <span><i style="background:var(--l1)"></i>1–4</span>
+        <span><i style="background:var(--l2)"></i>5–9</span>
+        <span><i style="background:var(--l3)"></i>10–14</span>
+        <span><i style="background:var(--l4)"></i>15개 다!</span>
+        <span>· 날짜를 누르면 그 날 나무로 가요</span>
+      </div>
+    </div>
+
+    <div class="panel note">
+      <h3>✏️ 선생님의 한마디</h3>
+      <div id="noteSaved" hidden>
+        <div class="saved">
+          <span class="seal" id="seal">참 잘했어요</span>
+          <p id="noteText"></p>
+          <div class="by" id="noteBy"></div>
+        </div>
+        <div class="row"><span></span><button id="noteEdit" type="button" class="ghost">고치기</button></div>
+      </div>
+      <form id="noteForm">
+        <p class="empty">한 달 연습을 보고 선생님이 칭찬과 도장을 남겨 주세요.</p>
+        <div class="stamps" role="radiogroup" aria-label="도장">
+          <label><input type="radio" name="stamp" value="참 잘했어요" checked>참 잘했어요</label>
+          <label><input type="radio" name="stamp" value="최고예요">최고예요</label>
+          <label><input type="radio" name="stamp" value="많이 늘었어요">많이 늘었어요</label>
+          <label><input type="radio" name="stamp" value="조금 더 힘내요">조금 더 힘내요</label>
+        </div>
+        <label for="noteInput" class="hint" style="display:block;text-align:left;margin-bottom:6px">한마디</label>
+        <textarea id="noteInput" placeholder="예) 왼손 연습을 꾸준히 해서 소리가 많이 좋아졌어요!"></textarea>
+        <div class="row">
+          <label for="teacher" class="display">선생님 <input id="teacher" type="text" placeholder="선생님 이름"></label>
+          <button type="submit">도장 찍기</button>
+        </div>
+      </form>
+    </div>
+  </section>
 </main>
 
 <script>
   const TREES = [
-    { id: "right", name: "오른손 나무" },
-    { id: "left",  name: "왼손 나무" },
-    { id: "both",  name: "같이 나무" },
+    { id: "right", name: "오른손 나무", emoji: "✋" },
+    { id: "left",  name: "왼손 나무",  emoji: "🤚" },
+    { id: "both",  name: "같이 나무",  emoji: "🙌" },
   ];
   const APPLE_POS = [[100, 62], [62, 100], [140, 98], [82, 140], [122, 142]];
-  const CHEERS = ["", "좋아요!", "잘하고 있어요!", "절반 넘었어요!", "하나만 더!", "다 익었어요! 최고예요!"];
-  const KEY = "apple-practice-log-v1";
+  const CHEERS = ["", "좋아요!", "잘하고 있어요!", "절반 넘었어요!", "하나만 더!", "🎉 다 익었어요! 최고예요!"];
+  const KEY = "apple-practice-log-v2";
+  const pad = (n) => String(n).padStart(2, "0");
+  const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const TODAY = ymd(new Date());
+  const blank = () => ({ right: [0,0,0,0,0].map(() => false), left: [0,0,0,0,0].map(() => false), both: [0,0,0,0,0].map(() => false), song: "" });
 
-  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
-  const save = (s) => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} };
-  let state = load();
-  state.apples = state.apples || {};
+  function load() {
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(KEY)); } catch {}
+    if (!s) {
+      s = { name: "", days: {}, notes: {}, goals: {} };
+      try { // bring over the earlier one-day version
+        const old = JSON.parse(localStorage.getItem("apple-practice-log-v1"));
+        if (old && old.apples) {
+          const d = old.date || TODAY;
+          s.name = old.name || "";
+          s.days[d] = { ...blank(), ...old.apples, song: old.song || "" };
+        }
+      } catch {}
+    }
+    s.days = s.days || {}; s.notes = s.notes || {}; s.goals = s.goals || {};
+    return s;
+  }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  const state = load();
+  let curDate = TODAY;
+  let curMonth = TODAY.slice(0, 7);
+  const dayRec = (d) => state.days[d] || (state.days[d] = blank());
+  const countOf = (rec) => rec ? TREES.reduce((n, t) => n + rec[t.id].filter(Boolean).length, 0) : 0;
 
+  /* ---------- Today ---------- */
   const NS = "http://www.w3.org/2000/svg";
   const el = (tag, attrs) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; };
-  const GOLD = "var(--gold)", GOLD_SOFT = "var(--gold-soft)";
 
-  function treeSVG(tree) {
+  function treeSVG(tree, on) {
     const svg = el("svg", { viewBox: "0 0 200 240", role: "group", "aria-label": tree.name });
-    const line = { fill: "none", stroke: GOLD_SOFT, "stroke-width": 1 };
     svg.append(
-      el("line", { x1: 20, y1: 230, x2: 180, y2: 230, ...line }),
-      el("line", { x1: 100, y1: 8, x2: 100, y2: 230, ...line, "stroke-dasharray": "3 4" }),
-      el("path", { d: "M90 230 L93 160 Q100 152 107 160 L110 230", fill: "rgba(216,182,119,.10)", stroke: GOLD, "stroke-width": 1.5 }),
-      el("path", { d: "M100 22 C140 22 158 50 156 72 C182 80 186 120 166 138 C162 166 132 172 118 164 C108 176 90 176 80 164 C64 172 36 164 34 138 C14 120 18 82 44 72 C42 48 62 22 100 22 Z",
-        fill: "rgba(216,182,119,.08)", stroke: GOLD, "stroke-width": 1.5 }),
-      el("path", { d: "M100 160 L100 120 M100 132 L78 112 M100 128 L124 108", fill: "none", stroke: GOLD_SOFT, "stroke-width": 1.2 }),
+      el("ellipse", { cx: 100, cy: 228, rx: 60, ry: 8, fill: "rgba(0,0,0,.08)" }),
+      el("path", { d: "M88 230 L92 160 Q100 150 108 160 L112 230 Z", fill: "var(--trunk)" }),
+      el("circle", { cx: 60, cy: 115, r: 45, fill: "var(--leaf-dark)" }),
+      el("circle", { cx: 140, cy: 115, r: 45, fill: "var(--leaf-dark)" }),
+      el("circle", { cx: 100, cy: 80, r: 58, fill: "var(--leaf)" }),
+      el("circle", { cx: 65, cy: 118, r: 40, fill: "var(--leaf)" }),
+      el("circle", { cx: 135, cy: 118, r: 40, fill: "var(--leaf)" }),
+      el("circle", { cx: 100, cy: 130, r: 38, fill: "var(--leaf)" }),
     );
-    const on = state.apples[tree.id] || [false, false, false, false, false];
-    state.apples[tree.id] = on;
     APPLE_POS.forEach(([x, y], i) => {
       const g = el("g", { class: "apple" + (on[i] ? " on" : ""), tabindex: 0, role: "button",
         "aria-pressed": on[i], "aria-label": `${tree.name} 사과 ${i + 1}` });
       g.append(
-        el("path", { d: `M${x} ${y - 14} q2 -8 6 -10`, stroke: GOLD, "stroke-width": 2, fill: "none", "stroke-linecap": "round" }),
-        el("ellipse", { cx: x + 8, cy: y - 20, rx: 6, ry: 3, fill: GOLD, transform: `rotate(-25 ${x + 8} ${y - 20})` }),
+        el("path", { d: `M${x} ${y - 14} q2 -8 6 -10`, stroke: "#6b4a2b", "stroke-width": 3, fill: "none", "stroke-linecap": "round" }),
+        el("ellipse", { cx: x + 8, cy: y - 20, rx: 6, ry: 3, fill: "var(--leaf-dark)", transform: `rotate(-25 ${x + 8} ${y - 20})` }),
         el("circle", { class: "body", cx: x, cy: y, r: 15 }),
-        el("ellipse", { class: "shine", cx: x - 5, cy: y - 5, rx: 4, ry: 6 }),
+        el("ellipse", { cx: x - 5, cy: y - 5, rx: 4, ry: 6, fill: "rgba(255,255,255,.55)" }),
       );
       const toggle = () => {
         on[i] = !on[i];
         g.classList.toggle("on", on[i]);
         g.setAttribute("aria-pressed", on[i]);
         g.classList.remove("pop"); void g.getBBox(); g.classList.add("pop");
-        save(state); update();
+        save(); updateToday();
       };
       g.addEventListener("click", toggle);
       g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
@@ -212,48 +368,167 @@
     return svg;
   }
 
-  const wrap = document.getElementById("trees");
-  function render() {
-    wrap.innerHTML = "";
+  const treesEl = document.getElementById("trees");
+  function renderToday() {
+    const rec = dayRec(curDate);
+    document.getElementById("date").value = curDate;
+    document.getElementById("song").value = rec.song || "";
+    treesEl.innerHTML = "";
     TREES.forEach((t) => {
       const card = document.createElement("article");
       card.className = "tree"; card.id = "tree-" + t.id;
-      card.innerHTML = `<h3>${t.name}</h3>`;
-      card.append(treeSVG(t));
+      card.innerHTML = `<h3>${t.emoji} ${t.name}</h3>`;
+      card.append(treeSVG(t, rec[t.id]));
       card.insertAdjacentHTML("beforeend", `<div class="count"><b>0</b> / 5</div><div class="cheer"></div>`);
-      wrap.append(card);
+      treesEl.append(card);
     });
-    update();
+    updateToday();
   }
-  function update() {
-    let total = 0;
+  function updateToday() {
+    const rec = dayRec(curDate);
     TREES.forEach((t) => {
-      const n = state.apples[t.id].filter(Boolean).length;
-      total += n;
+      const n = rec[t.id].filter(Boolean).length;
       const card = document.getElementById("tree-" + t.id);
       card.querySelector(".count b").textContent = n;
       card.querySelector(".cheer").textContent = CHEERS[n];
       card.classList.toggle("done", n === 5);
     });
-    document.getElementById("total").textContent = total;
+    document.getElementById("total").textContent = countOf(rec);
   }
 
-  ["name", "date", "song"].forEach((k) => {
-    const input = document.getElementById(k);
-    input.value = state[k] || (k === "date" ? new Date().toISOString().slice(0, 10) : "");
-    input.addEventListener("input", () => { state[k] = input.value; save(state); });
+  /* ---------- Month ---------- */
+  const STAGES = [
+    [0,  "🌱 씨앗을 심었어요"],
+    [25, "🌿 새싹이 쑥쑥 자라요"],
+    [50, "🌳 나무가 튼튼해졌어요"],
+    [75, "🍎 사과가 주렁주렁!"],
+    [100,"🏆 목표 달성! 사과 바구니 가득!"],
+  ];
+  function renderMonth() {
+    const [y, m] = curMonth.split("-").map(Number);
+    const days = new Date(y, m, 0).getDate();
+    const first = new Date(y, m - 1, 1).getDay();
+    document.getElementById("mtitle").textContent = `${y}년 ${m}월`;
+
+    const goal = state.goals[curMonth] || 20;
+    document.getElementById("goal").value = goal;
+    let practiced = 0, apples = 0;
+    const hand = { right: 0, left: 0, both: 0 };
+    const cal = document.getElementById("cal");
+    cal.innerHTML = "";
+    "일월화수목금토".split("").forEach((w) => cal.insertAdjacentHTML("beforeend", `<div class="wd">${w}</div>`));
+    for (let i = 0; i < first; i++) cal.insertAdjacentHTML("beforeend", "<span></span>");
+    for (let d = 1; d <= days; d++) {
+      const key = `${curMonth}-${pad(d)}`;
+      const rec = state.days[key];
+      const n = countOf(rec);
+      if (n > 0) practiced++;
+      apples += n;
+      if (rec) TREES.forEach((t) => (hand[t.id] += rec[t.id].filter(Boolean).length));
+      const lvl = n === 0 ? 0 : n < 5 ? 1 : n < 10 ? 2 : n < 15 ? 3 : 4;
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = `day l${lvl}` + (key === TODAY ? " today" : "");
+      b.setAttribute("aria-label", `${m}월 ${d}일, 사과 ${n}개`);
+      b.innerHTML = `<span>${d}</span><span class="n">${n ? "🍎" + n : ""}</span>`;
+      b.addEventListener("click", () => { curDate = key; location.hash = "today"; });
+      cal.append(b);
+    }
+    const maxApples = goal * 15;
+    const pct = Math.min(100, Math.round((apples / maxApples) * 100));
+    document.getElementById("sDays").textContent = practiced;
+    document.getElementById("sApples").textContent = apples;
+    document.getElementById("sApplesMax").textContent = `목표 ${maxApples}개 (하루 15개 × ${goal}일)`;
+    document.getElementById("sPct").textContent = pct;
+    document.getElementById("pfill").style.width = pct + "%";
+    document.getElementById("pbar").setAttribute("aria-valuenow", pct);
+    document.getElementById("stage").textContent = STAGES.filter(([p]) => pct >= p).pop()[1];
+
+    const handMax = goal * 5;
+    document.getElementById("hands").innerHTML = TREES.map((t) => {
+      const w = Math.min(100, Math.round((hand[t.id] / handMax) * 100));
+      return `<div class="hand"><span>${t.emoji} ${t.name.replace(" 나무", "")}</span><div class="bar"><i style="width:${w}%"></i></div><span>${hand[t.id]}개</span></div>`;
+    }).join("");
+
+    renderNote();
+  }
+
+  const noteForm = document.getElementById("noteForm"), noteSaved = document.getElementById("noteSaved");
+  function renderNote(editing) {
+    const note = state.notes[curMonth];
+    const show = note && !editing;
+    noteSaved.hidden = !show;
+    noteForm.hidden = !!show;
+    if (show) {
+      const sp = note.stamp.lastIndexOf(" ");
+      document.getElementById("seal").textContent = sp > 0 ? note.stamp.slice(0, sp) + "\n" + note.stamp.slice(sp + 1) : note.stamp;
+      document.getElementById("noteText").textContent = note.text || "";
+      const [, mm, dd] = note.date.split("-");
+      document.getElementById("noteBy").textContent = `— ${note.teacher ? note.teacher + " 선생님" : "선생님"} · ${Number(mm)}월 ${Number(dd)}일`;
+    } else {
+      document.getElementById("noteInput").value = note ? note.text : "";
+      document.getElementById("teacher").value = note ? note.teacher : (state.lastTeacher || "");
+      const stamp = note ? note.stamp : "참 잘했어요";
+      noteForm.querySelectorAll('input[name="stamp"]').forEach((r) => (r.checked = r.value === stamp));
+    }
+  }
+  noteForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const teacher = document.getElementById("teacher").value.trim();
+    state.notes[curMonth] = {
+      stamp: noteForm.querySelector('input[name="stamp"]:checked').value,
+      text: document.getElementById("noteInput").value.trim(),
+      teacher, date: TODAY,
+    };
+    state.lastTeacher = teacher;
+    save(); renderNote();
   });
+  document.getElementById("noteEdit").addEventListener("click", () => renderNote(true));
+
+  document.getElementById("goal").addEventListener("change", (e) => {
+    const v = Math.max(1, Math.min(31, parseInt(e.target.value, 10) || 20));
+    state.goals[curMonth] = v; save(); renderMonth();
+  });
+  const shiftMonth = (k) => {
+    const [y, m] = curMonth.split("-").map(Number);
+    const d = new Date(y, m - 1 + k, 1);
+    curMonth = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+    renderMonth();
+  };
+  document.getElementById("prev").addEventListener("click", () => shiftMonth(-1));
+  document.getElementById("next").addEventListener("click", () => shiftMonth(1));
+
+  /* ---------- Shared inputs ---------- */
+  const nameIn = document.getElementById("name");
+  nameIn.value = state.name || "";
+  nameIn.addEventListener("input", () => { state.name = nameIn.value; save(); });
+  document.getElementById("date").addEventListener("change", (e) => { if (e.target.value) { curDate = e.target.value; renderToday(); } });
+  document.getElementById("song").addEventListener("input", (e) => { dayRec(curDate).song = e.target.value; save(); });
 
   const resetBtn = document.getElementById("reset"), ask = document.getElementById("ask");
   resetBtn.addEventListener("click", () => { resetBtn.hidden = true; ask.hidden = false; });
   document.getElementById("no").addEventListener("click", () => { ask.hidden = true; resetBtn.hidden = false; });
   document.getElementById("yes").addEventListener("click", () => {
-    TREES.forEach((t) => (state.apples[t.id] = [false, false, false, false, false]));
-    save(state); render();
+    const song = dayRec(curDate).song;
+    state.days[curDate] = { ...blank(), song };
+    save(); renderToday();
     ask.hidden = true; resetBtn.hidden = false;
   });
 
-  render();
+  /* ---------- Routing ---------- */
+  function route() {
+    const month = location.hash === "#month";
+    document.getElementById("view-today").hidden = month;
+    const vm = document.getElementById("view-month");
+    vm.hidden = !month; vm.style.display = month ? "flex" : "";
+    document.querySelectorAll(".only-today").forEach((n) => (n.hidden = month));
+    document.getElementById("tab-today").toggleAttribute("aria-current", !month);
+    document.getElementById("tab-month").toggleAttribute("aria-current", month);
+    if (month) { document.getElementById("tab-month").setAttribute("aria-current", "page"); curMonth = curDate.slice(0, 7); renderMonth(); }
+    else { document.getElementById("tab-today").setAttribute("aria-current", "page"); renderToday(); }
+  }
+  window.addEventListener("hashchange", route);
+  route();
 </script>
 </body>
 </html>

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사과나무 연습일지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf8ec;
+    --card: #ffffff;
+    --ink: #3b2f22;
+    --muted: #8a7a66;
+    --line: #eadfc8;
+    --leaf: #5cb85c;
+    --leaf-dark: #3f9a43;
+    --trunk: #9b6b3f;
+    --apple-off: #b9df8c;
+    --apple-on: #e53935;
+    --accent: #ff8a3d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1f1b16; --card: #2a251f; --ink: #f4ead8; --muted: #b5a68f; --line: #3d362d;
+      --leaf: #4a9e4f; --leaf-dark: #357a3a; --trunk: #8a5d36;
+      --apple-off: #9cc472; --apple-on: #ff5249; --accent: #ff9b55;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1f1b16; --card: #2a251f; --ink: #f4ead8; --muted: #b5a68f; --line: #3d362d;
+    --leaf: #4a9e4f; --leaf-dark: #357a3a; --trunk: #8a5d36;
+    --apple-off: #9cc472; --apple-on: #ff5249; --accent: #ff9b55;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 40px; }
+  h1 { text-align: center; font-size: clamp(28px, 6vw, 42px); margin: 4px 0 6px; font-weight: 400; }
+  .sub { text-align: center; color: var(--muted); margin: 0 0 20px; font-size: 18px; }
+  .info {
+    display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    background: var(--card); border: 2px solid var(--line); border-radius: 18px;
+    padding: 14px; margin-bottom: 20px;
+  }
+  .info label { display: flex; align-items: center; gap: 8px; font-size: 18px; }
+  .info input {
+    font: inherit; font-size: 18px; color: var(--ink); background: var(--bg);
+    border: 2px solid var(--line); border-radius: 10px; padding: 6px 10px; width: 160px;
+  }
+  .trees { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .trees { grid-template-columns: 1fr; } }
+  .tree {
+    background: var(--card); border: 2px solid var(--line); border-radius: 22px;
+    padding: 14px 10px 16px; text-align: center; transition: border-color .3s, box-shadow .3s;
+  }
+  .tree.done { border-color: var(--apple-on); box-shadow: 0 0 0 4px color-mix(in srgb, var(--apple-on) 20%, transparent); }
+  .tree h2 { margin: 0; font-size: 26px; font-weight: 400; }
+  .tree svg { width: 100%; max-width: 280px; height: auto; display: block; margin: 0 auto; }
+  .apple { cursor: pointer; transform-box: fill-box; transform-origin: center; transition: transform .15s; }
+  .apple:hover { transform: scale(1.08); }
+  .apple:focus { outline: none; }
+  .apple:focus-visible .body { stroke: var(--accent); stroke-width: 4; }
+  .apple .body { fill: var(--apple-off); stroke: rgba(0,0,0,.15); stroke-width: 2; transition: fill .25s; }
+  .apple.on .body { fill: var(--apple-on); }
+  .apple.pop { animation: pop .35s ease; }
+  @keyframes pop { 50% { transform: scale(1.25); } }
+  .count { font-size: 22px; margin-top: 4px; }
+  .count b { color: var(--apple-on); font-weight: 400; }
+  .cheer { min-height: 26px; color: var(--accent); font-size: 20px; }
+  .total {
+    margin-top: 20px; text-align: center; font-size: 24px;
+    background: var(--card); border: 2px solid var(--line); border-radius: 18px; padding: 14px;
+  }
+  .total b { color: var(--apple-on); font-weight: 400; }
+  .actions { text-align: center; margin-top: 16px; }
+  button {
+    font: inherit; font-size: 18px; color: #fff; background: var(--accent);
+    border: none; border-radius: 999px; padding: 10px 22px; cursor: pointer;
+  }
+  button:hover { filter: brightness(1.05); }
+  .hint { text-align: center; color: var(--muted); margin-top: 12px; font-size: 16px; }
+  @media print {
+    .actions, .hint { display: none; }
+    body { background: #fff; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>🍎 사과나무 연습일지 🍎</h1>
+  <p class="sub">한 번 연습할 때마다 사과를 눌러서 빨갛게 익혀 주세요!</p>
+
+  <div class="info">
+    <label>이름 <input id="name" type="text" placeholder="이름을 써요"></label>
+    <label>날짜 <input id="date" type="date"></label>
+    <label>곡 이름 <input id="song" type="text" placeholder="연습한 곡"></label>
+  </div>
+
+  <section class="trees" id="trees"></section>
+
+  <div class="total">오늘 딴 사과: <b id="total">0</b> / 15 개</div>
+
+  <div class="actions"><button id="reset" type="button">🔄 처음부터 다시</button></div>
+  <p class="hint">사과를 한 번 더 누르면 다시 초록색으로 돌아가요.</p>
+</main>
+
+<script>
+  const TREES = [
+    { id: "right", name: "오른손 나무", emoji: "✋" },
+    { id: "left",  name: "왼손 나무",  emoji: "🤚" },
+    { id: "both",  name: "같이 나무",  emoji: "🙌" },
+  ];
+  const APPLE_POS = [[100, 62], [62, 100], [140, 98], [82, 140], [122, 142]];
+  const CHEERS = ["", "좋아요!", "잘하고 있어요!", "절반 넘었어요!", "하나만 더!", "🎉 다 익었어요! 최고예요!"];
+  const KEY = "apple-practice-log-v1";
+
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+  const save = (s) => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} };
+  let state = load();
+  state.apples = state.apples || {};
+
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); return n; };
+
+  function treeSVG(tree) {
+    const svg = el("svg", { viewBox: "0 0 200 240", role: "group", "aria-label": tree.name });
+    svg.append(
+      el("ellipse", { cx: 100, cy: 228, rx: 60, ry: 8, fill: "rgba(0,0,0,.08)" }),
+      el("path", { d: "M88 230 L92 160 Q100 150 108 160 L112 230 Z", fill: "var(--trunk)" }),
+      el("circle", { cx: 60, cy: 115, r: 45, fill: "var(--leaf-dark)" }),
+      el("circle", { cx: 140, cy: 115, r: 45, fill: "var(--leaf-dark)" }),
+      el("circle", { cx: 100, cy: 80, r: 58, fill: "var(--leaf)" }),
+      el("circle", { cx: 65, cy: 118, r: 40, fill: "var(--leaf)" }),
+      el("circle", { cx: 135, cy: 118, r: 40, fill: "var(--leaf)" }),
+      el("circle", { cx: 100, cy: 130, r: 38, fill: "var(--leaf)" }),
+    );
+    const on = state.apples[tree.id] || [false, false, false, false, false];
+    state.apples[tree.id] = on;
+    APPLE_POS.forEach(([x, y], i) => {
+      const g = el("g", { class: "apple" + (on[i] ? " on" : ""), tabindex: 0, role: "button",
+        "aria-pressed": on[i], "aria-label": `${tree.name} 사과 ${i + 1}` });
+      g.append(
+        el("path", { d: `M${x} ${y - 14} q2 -8 6 -10`, stroke: "#6b4a2b", "stroke-width": 3, fill: "none", "stroke-linecap": "round" }),
+        el("ellipse", { cx: x + 8, cy: y - 20, rx: 6, ry: 3, fill: "var(--leaf-dark)", transform: `rotate(-25 ${x + 8} ${y - 20})` }),
+        el("circle", { class: "body", cx: x, cy: y, r: 15 }),
+        el("ellipse", { cx: x - 5, cy: y - 5, rx: 4, ry: 6, fill: "rgba(255,255,255,.55)" }),
+      );
+      const toggle = () => {
+        on[i] = !on[i];
+        g.classList.toggle("on", on[i]);
+        g.setAttribute("aria-pressed", on[i]);
+        g.classList.remove("pop"); void g.getBBox(); g.classList.add("pop");
+        save(state); update();
+      };
+      g.addEventListener("click", toggle);
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+      svg.append(g);
+    });
+    return svg;
+  }
+
+  const wrap = document.getElementById("trees");
+  function render() {
+    wrap.innerHTML = "";
+    TREES.forEach((t) => {
+      const card = document.createElement("article");
+      card.className = "tree"; card.id = "tree-" + t.id;
+      card.innerHTML = `<h2>${t.emoji} ${t.name}</h2>`;
+      card.append(treeSVG(t));
+      card.insertAdjacentHTML("beforeend", `<div class="count"><b>0</b> / 5</div><div class="cheer"></div>`);
+      wrap.append(card);
+    });
+    update();
+  }
+  function update() {
+    let total = 0;
+    TREES.forEach((t) => {
+      const n = state.apples[t.id].filter(Boolean).length;
+      total += n;
+      const card = document.getElementById("tree-" + t.id);
+      card.querySelector(".count b").textContent = n;
+      card.querySelector(".cheer").textContent = CHEERS[n];
+      card.classList.toggle("done", n === 5);
+    });
+    document.getElementById("total").textContent = total;
+  }
+
+  ["name", "date", "song"].forEach((k) => {
+    const input = document.getElementById(k);
+    input.value = state[k] || (k === "date" ? new Date().toISOString().slice(0, 10) : "");
+    input.addEventListener("input", () => { state[k] = input.value; save(state); });
+  });
+
+  document.getElementById("reset").addEventListener("click", () => {
+    if (!confirm("사과를 모두 초록색으로 되돌릴까요?")) return;
+    TREES.forEach((t) => (state.apples[t.id] = [false, false, false, false, false]));
+    save(state); render();
+  });
+
+  render();
+</script>
+</body>
+</html>
